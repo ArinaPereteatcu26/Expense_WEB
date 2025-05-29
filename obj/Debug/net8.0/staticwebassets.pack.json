@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Expense_WEB.bundle.scp.css",
-      "PackagePath": "staticwebassets\\Expense_WEB.bundle.scp.css"
-    },
-    {
       "Id": "E:\\Projects\\Expense_WEB\\Expense_WEB\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

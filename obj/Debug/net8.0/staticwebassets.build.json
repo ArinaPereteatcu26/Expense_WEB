@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AxS6AsCbPUvhadQzuDHlVnlN/N1oe1FBeIkzP+y2+/M=",
+  "Hash": "YBygRET7Vld+J2g2Njx7lWPIQmrc9beY1tHjNi0j+7I=",
   "Source": "Expense_WEB",
   "BasePath": "_content/Expense_WEB",
   "Mode": "Default",
@@ -16,44 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Expense_WEB.styles.css",
-      "SourceId": "Expense_WEB",
-      "SourceType": "Computed",
-      "ContentRoot": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
-      "BasePath": "_content/Expense_WEB",
-      "RelativePath": "Expense_WEB.styles.css",
-      "AssetKind": "All",
-      "AssetMode": "CurrentProject",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ApplicationBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Expense_WEB.styles.css"
-    },
-    {
-      "Identity": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Expense_WEB.bundle.scp.css",
-      "SourceId": "Expense_WEB",
-      "SourceType": "Computed",
-      "ContentRoot": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
-      "BasePath": "_content/Expense_WEB",
-      "RelativePath": "Expense_WEB.bundle.scp.css",
-      "AssetKind": "All",
-      "AssetMode": "Reference",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ProjectBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Expense_WEB.bundle.scp.css"
-    },
     {
       "Identity": "E:\\Projects\\Expense_WEB\\Expense_WEB\\wwwroot\\css\\site.css",
       "SourceId": "Expense_WEB",

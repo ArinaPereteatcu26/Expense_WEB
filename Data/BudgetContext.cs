@@ -1,9 +1,6 @@
 ﻿using Expense_WEB.Models;
-
-namespace Expense_WEB.Data;
-
-
 using Microsoft.EntityFrameworkCore;
+namespace Expense_WEB.Data;
 
 
 public class BudgetContext : DbContext

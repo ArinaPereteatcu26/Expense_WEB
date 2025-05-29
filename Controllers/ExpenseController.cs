@@ -1,119 +1,65 @@
-/*using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Expense_WEB.Data;
-using Expense_WEB.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Expense_WEB.DTOs;
 
-namespace ExpenseTrackerApi.Controllers
+namespace Expense_WEB.Controllers
 {
-    [Route("api/[controller]")]
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+
+
     [ApiController]
+    [Route("[controller]")]
     [Authorize]
     public class ExpensesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        
-        public ExpensesController(ApplicationDbContext context)
+        private readonly IExpenseService _expenseService;
+
+        public ExpensesController(IExpenseService expenseService)
         {
-            _context = context;
+            _expenseService = expenseService;
         }
         
-        // GET: api/Expenses
         [HttpGet]
-        [Authorize(Roles = "ADMIN,VISITOR,WRITER")]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses([FromQuery] int skip = 0, [FromQuery] int limit = 10)
+        [Authorize(Policy = "RequireReadPermission")]
+        public async Task<IActionResult> GetExpenses([FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] int? budgetId = null)
         {
-            return await _context.Expenses
-                .Skip(skip)
-                .Take(limit)
-                .ToListAsync();
+            var userId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+            var role = User.FindFirst("role")?.Value ?? "USER";
+            
+            var result = await _expenseService.GetExpensesAsync(userId, role, page, limit, budgetId);
+            return Ok(result);
         }
         
-        // GET: api/Expenses/5
-        [HttpGet("{id}")]
-        [Authorize(Roles = "ADMIN,VISITOR,WRITER")]
-        public async Task<ActionResult<Expense>> GetExpense(int id)
+        [HttpPost]
+        [Authorize(Policy = "RequireWritePermission")]
+        public async Task<IActionResult> CreateExpense([FromBody] TokenDtos.CreateExpenseDto dto)
         {
-            var expense = await _context.Expenses.FindAsync(id);
+            if (string.IsNullOrEmpty(dto.Name) || dto.Amount <= 0 || dto.BudgetId <= 0)
+                return BadRequest(new { error = "Name, positive amount, and budgetId are required" });
+
+            var userId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+            var role = User.FindFirst("role")?.Value ?? "USER";
+            
+            var expense = await _expenseService.CreateExpenseAsync(dto, userId, role);
             
             if (expense == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { error = "Budget not found or access denied" });
             
-            return expense;
+            return CreatedAtAction(nameof(GetExpenses), new { id = expense.Id }, expense);
         }
         
-        // POST: api/Expenses
-        [HttpPost]
-        [Authorize(Roles = "ADMIN,WRITER")]
-        public async Task<ActionResult<Expense>> CreateExpense(Expense expense)
-        {
-            // Get user ID from JWT claims
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            expense.UserId = userId;
-            
-            _context.Expenses.Add(expense);
-            await _context.SaveChangesAsync();
-            
-            return CreatedAtAction(nameof(GetExpense), new { id = expense.Id }, expense);
-        }
-        
-        // PUT: api/Expenses/5
-        [HttpPut("{id}")]
-        [Authorize(Roles = "ADMIN,WRITER")]
-        public async Task<IActionResult> UpdateExpense(int id, Expense expense)
-        {
-            if (id != expense.Id)
-            {
-                return BadRequest();
-            }
-            
-            _context.Entry(expense).State = EntityState.Modified;
-            
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExpenseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            
-            return NoContent();
-        }
-        
-        // DELETE: api/Expenses/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Policy = "RequireDeletePermission")]
         public async Task<IActionResult> DeleteExpense(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
-            {
-                return NotFound();
-            }
+            var userId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+            var role = User.FindFirst("role")?.Value ?? "USER";
             
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
+            var success = await _expenseService.DeleteExpenseAsync(id, userId, role);
+            
+            if (!success)
+                return NotFound(new { error = "Expense not found or access denied" });
             
             return NoContent();
         }
-        
-        private bool ExpenseExists(int id)
-        {
-            return _context.Expenses.Any(e => e.Id == id);
-        }
     }
-}*/
+}
