@@ -1,8 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Expense_WEB.DTOs;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Expense_WEB.Services
 {
@@ -17,34 +17,18 @@ namespace Expense_WEB.Services
 
         public TokenDtos.TokenResponse GenerateToken(TokenDtos.TokenRequest request)
         {
-            var validRoles = new[] { "ADMIN", "USER", "VISITOR" };
-            if (!validRoles.Contains(request.Role))
-            {
-                throw new ArgumentException("Invalid role. Must be ADMIN, USER, or VISITOR");
-            }
-
-            var defaultPermissions = new Dictionary<string, List<string>>
-            {
-                ["ADMIN"] = new() { "READ", "WRITE", "DELETE", "MANAGE" },
-                ["USER"] = new() { "READ", "WRITE" },
-                ["VISITOR"] = new() { "READ" }
-            };
-
-            var permissions = request.Role == "ADMIN" 
-                ? defaultPermissions["ADMIN"] 
-                : request.Permissions ?? defaultPermissions.GetValueOrDefault(request.Role, new List<string> { "READ" });
-
-            var secretKey = _configuration["JwtSettings:SecretKey"] ?? "YourSuperSecretKeyThatShouldBeChangedInProduction123!";
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var jwtKey = _configuration["JwtSettings:SecretKey"] 
+                         ?? "YourSuperSecretKeyThatShouldBeChangedInProduction123!";
+            var key = Encoding.ASCII.GetBytes(jwtKey);
 
             var claims = new List<Claim>
             {
-                new("userId", request.UserId.ToString()),
-                new("role", request.Role),
-                new("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+                new Claim(ClaimTypes.Name, request.Username),
+                new Claim("role", request.Role),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            foreach (var permission in permissions)
+            foreach (var permission in request.Permissions)
             {
                 claims.Add(new Claim("permission", permission));
             }
@@ -52,19 +36,21 @@ namespace Expense_WEB.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(1), // 1 minute expiration for demo
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddMinutes(1), // 1 minute expiration
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key), 
+                    SecurityAlgorithms.HmacSha256Signature)
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
             return new TokenDtos.TokenResponse
             {
-                Token = tokenHandler.WriteToken(token),
-                ExpiresIn = "1m",
-                Role = request.Role,
-                Permissions = permissions
+                Token = tokenString,
+                TokenType = "Bearer",
+                ExpiresIn = "60" // 60 seconds
             };
         }
     }

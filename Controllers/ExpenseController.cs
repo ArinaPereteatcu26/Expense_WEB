@@ -7,7 +7,7 @@ namespace Expense_WEB.Controllers
 
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class ExpensesController : ControllerBase
     {

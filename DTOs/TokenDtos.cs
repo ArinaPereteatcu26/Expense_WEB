@@ -4,17 +4,16 @@ public class TokenDtos
 {
     public class TokenRequest
     {
-        public string Role { get; set; } = "USER";
-        public List<string>? Permissions { get; set; }
-        public int UserId { get; set; } = 1;
+        public string Username { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string[] Permissions { get; set; } = Array.Empty<string>();
     }
 
     public class TokenResponse
     {
         public string Token { get; set; } = string.Empty;
+        public string TokenType { get; set; } = "Bearer";
         public string ExpiresIn { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-        public List<string> Permissions { get; set; } = new();
     }
 
     public class CreateBudgetDto
@@ -50,5 +49,11 @@ public class TokenDtos
         public int ItemsPerPage { get; set; }
         public bool HasNext { get; set; }
         public bool HasPrev { get; set; }
+    }
+    
+    public class LoginRequest
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

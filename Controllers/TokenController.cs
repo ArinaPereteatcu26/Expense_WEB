@@ -6,7 +6,7 @@ namespace Expense_WEB.Controllers
     
     
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TokenController : ControllerBase
     {
         private readonly ITokenService _tokenService;

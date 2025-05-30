@@ -9,7 +9,7 @@ namespace Expense_WEB.Controllers
     using System.Security.Claims;
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class BudgetsController : ControllerBase
     {
