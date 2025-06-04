@@ -13,6 +13,7 @@
         "packagesPath": "C:\\Users\\arina\\.nuget\\packages\\",
         "outputPath": "E:\\Projects\\Expense_WEB\\Expense_WEB\\obj\\",
         "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "C:\\Users\\arina\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -49,6 +50,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.16, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.15, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

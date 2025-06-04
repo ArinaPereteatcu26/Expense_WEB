@@ -1,22 +1,14 @@
-﻿/*using Expense_WEB.Models;
+﻿using Expense_WEB.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 
 namespace Expense_WEB.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-        
-        public DbSet<Expense> Expenses { get; set; }
-        public DbSet<User> Users { get; set; }
-        
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :base(options)
+        { }
     }
-}*/
+}
