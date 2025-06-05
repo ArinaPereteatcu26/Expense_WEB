@@ -156,7 +156,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
@@ -188,7 +187,7 @@ app.MapPost("/api/signup", async (
         var result = await userManager.CreateAsync(user, userRegistrationModel.Password);
 
         if (result.Succeeded)
-            return Results.Ok(new { Message = "User created successfully", UserId = user.Id });
+            return Results.Ok(new { succeeded = true, message = "User created successfully", userId = user.Id });
         else 
             return Results.BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
     }
