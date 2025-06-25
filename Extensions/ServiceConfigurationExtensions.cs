@@ -6,6 +6,7 @@ using System.Text;
 using Expense_WEB.Data;
 using Expense_WEB.Models;
 using Expense_WEB.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Expense_WEB.Extensions
@@ -32,11 +33,12 @@ namespace Expense_WEB.Extensions
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
                     Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Description = "Fill in the JWT token",
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -50,11 +52,17 @@ namespace Expense_WEB.Extensions
                                 Id = "Bearer"
                             }
                         },
-                        new string[] {}
+                        new List<String>()
                     }
                 });
             });
-
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
             return services;
         }
 
@@ -101,6 +109,8 @@ namespace Expense_WEB.Extensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(configuration["AppSettings:JWTSecret"]!)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
                 };
             });
 

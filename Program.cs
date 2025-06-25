@@ -1,3 +1,4 @@
+using Expense_WEB.Controllers;
 using Expense_WEB.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ app.ConfigureMiddleware();
 
 // Configure endpoints using extension methods
 app.ConfigureAuthEndpoints(builder.Configuration);
-
+app.MapAccountEndpoints();
 // Initialize database
 app.InitializeDatabase();
 

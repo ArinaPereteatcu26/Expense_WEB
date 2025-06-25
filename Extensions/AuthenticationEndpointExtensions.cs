@@ -44,7 +44,7 @@ namespace Expense_WEB.Extensions
                 {
                     return Results.Problem($"An error occurred: {ex.Message}");
                 }
-            });
+            }).AllowAnonymous();
 
             // Signin endpoint
             app.MapPost("/api/signin", async (
@@ -70,7 +70,7 @@ namespace Expense_WEB.Extensions
                     return Results.Ok(new { token });
                 }
                 return Results.BadRequest(new { message = "Invalid login or password" });
-            });
+            }).AllowAnonymous();
 
             return app;
         }
